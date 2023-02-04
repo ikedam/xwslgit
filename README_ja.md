@@ -68,6 +68,15 @@ WSLENV=GIT_SSH/p:GIT_DIR/p:GIT_WORK_TREE/p:GIT_AUTHOR_NAME:GIT_AUTHOR_EMAIL
 
 そんだけ。
 
+特別なコマンド
+--------------
+
+`xwslgit` のバージョン情報を以下のコマンドで確認できます:
+
+```sh
+xwslgit xwslgitversion
+```
+
 ローカルでのビルド方法
 ----------------------
 

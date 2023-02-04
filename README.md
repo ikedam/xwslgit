@@ -70,6 +70,15 @@ Detailed behavior
 
 That's all.
 
+Special command
+---------------
+
+You can see the version information of `xwslgit` with:
+
+```sh
+xwslgit xwslgitversion
+```
+
 How to build locally
 --------------------
 
