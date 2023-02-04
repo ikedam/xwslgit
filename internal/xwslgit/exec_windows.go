@@ -8,7 +8,7 @@ import (
 	"syscall"
 )
 
-func execCommand(args ...string) error {
+func execCommand(args ...string) *exec.Cmd {
 	cmd := exec.Command(args[0], args[1:]...)
 	// not to open console.
 	// build with -ldflags="-H=windowsgui"
@@ -17,5 +17,5 @@ func execCommand(args ...string) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	return cmd
 }

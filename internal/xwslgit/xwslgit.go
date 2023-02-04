@@ -4,12 +4,23 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path/filepath"
 
 	"go.uber.org/zap"
 
 	"github.com/pkg/errors"
 )
+
+var wslPathPrefixes = []string{
+	`\\wsl$\`,
+	`\\wsl.localhost\`,
+}
+
+// Config is configurations for XWSLGit
+// Considered loading from YAML file.
+type Config struct {
+	Debug     DebugConfig
+	Detection DetectionConfig
+}
 
 // DebugConfig is configurations for debug outputs
 type DebugConfig struct {
@@ -18,19 +29,24 @@ type DebugConfig struct {
 	Envs    []string
 }
 
-// Config is configurations for XWSLGit
-// Considered loading from YAML file.
-type Config struct {
-	Debug DebugConfig
+// DetectinoConfig is configurations about how to detect distribution
+type DetectionConfig struct {
+	UseArguments bool
 }
 
 // Runner runs operations for xwslgit
 type Runner struct {
 	config *Config
 	logger *zap.Logger
+	pid    int
+	cwd    string
 }
 
 func NewRunner(config *Config) (*Runner, error) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return nil, errors.Wrapf(err, "could not get current working directory")
+	}
 	zapConfig := zap.NewDevelopmentConfig()
 	if config.Debug.Enabled && config.Debug.Logfile != "" {
 		zapConfig.OutputPaths = []string{
@@ -46,17 +62,12 @@ func NewRunner(config *Config) (*Runner, error) {
 	return &Runner{
 		config: config,
 		logger: logger,
+		pid:    os.Getpid(),
+		cwd:    cwd,
 	}, nil
 }
 
 func (r *Runner) Run(args ...string) int {
-	pid := os.Getpid()
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Printf("xwslgit: could not get current working directory: %+v", err)
-		return 127
-	}
-
 	var envs []string
 	for _, envname := range r.config.Debug.Envs {
 		envs = append(envs, envname+"="+os.Getenv(envname))
@@ -64,90 +75,32 @@ func (r *Runner) Run(args ...string) int {
 
 	r.logger.Debug(
 		"started",
-		zap.Int("pid", pid),
+		zap.Int("pid", r.pid),
 		zap.Strings("args", args),
 		zap.Strings("envs", envs),
-		zap.String("cwd", cwd),
+		zap.String("cwd", r.cwd),
 	)
 
-	command, err := r.PrepareWindowsGit(os.Args[0], os.Args[1:]...)
-	if err != nil {
-		log.Printf("xwslgit: could not detect git on Windows: %+v", err)
+	distro := r.DetectDistribution(args...)
+	cmd := r.PrepareCommandForDistro(distro, args...)
+	if cmd == nil {
+		// Error message is output inside PrepareCommandForDistro
 		return 127
 	}
+
 	r.logger.Debug(
 		"launch",
-		zap.Int("pid", pid),
-		zap.Strings("args", command),
+		zap.Int("pid", r.pid),
+		zap.Strings("args", cmd.Args),
 	)
-	err = execCommand(command...)
+	err := cmd.Run()
 	if err != nil {
 		var exitErr *exec.ExitError
 		if errors.As(err, &exitErr) {
 			return exitErr.ExitCode()
 		}
-		log.Printf("xwslgit: command %v failed with: %+v", command, err)
+		log.Printf("xwslgit: command %v failed with: %+v", cmd.Args, err)
 		return 127
 	}
 	return 0
-}
-
-func findAnotherExecutable(currentExecutable, name string) (string, error) {
-	currentFileInfo, err := os.Stat(currentExecutable)
-	if err != nil {
-		return "", errors.Wrapf(err, "could not stat %v", currentExecutable)
-	}
-
-	// `exec.LookPath()` may return myself, so search manually.
-	_, currentExecutableName := filepath.Split(currentExecutable)
-	var exts []string
-	pathExt := os.Getenv("PATHEXT")
-	if pathExt != "" {
-		for _, e := range filepath.SplitList(pathExt) {
-			if e == "" {
-				continue
-			}
-			if e[0] != '.' {
-				e = "." + e
-			}
-			exts = append(exts, e)
-		}
-	}
-	if len(exts) == 0 {
-		exts = []string{".exe"}
-	}
-
-	paths := os.Getenv("PATH")
-	for _, dir := range filepath.SplitList(paths) {
-		// test whether not the place of xwslgit
-		// (to skip possible .bat file in the same directory)
-		possiblePath := filepath.Join(dir, currentExecutableName)
-		possibleFileInfo, err := os.Stat(possiblePath)
-		if err == nil && os.SameFile(currentFileInfo, possibleFileInfo) {
-			continue
-		}
-		for _, e := range exts {
-			path := filepath.Join(dir, "git"+e)
-			fileInfo, err := os.Stat(path)
-			if err != nil {
-				continue
-			}
-			if os.SameFile(currentFileInfo, fileInfo) {
-				continue
-			}
-			if fileInfo.IsDir() {
-				continue
-			}
-			return path, nil
-		}
-	}
-	return "", exec.ErrNotFound
-}
-
-func (r *Runner) PrepareWindowsGit(currentExecutable string, args ...string) ([]string, error) {
-	gitPath, err := findAnotherExecutable(currentExecutable, "git")
-	if err != nil {
-		return nil, errors.Wrapf(err, "git on Windows was not found")
-	}
-	return append([]string{gitPath}, args...), nil
 }
