@@ -41,10 +41,11 @@ type DetectionConfig struct {
 
 // Runner runs operations for xwslgit
 type Runner struct {
-	config *Config
-	logger *zap.Logger
-	pid    int
-	cwd    string
+	config     *Config
+	logger     *zap.Logger
+	pid        int
+	cwd        string
+	executable string
 }
 
 // NewRunner creates a new runner
@@ -53,6 +54,10 @@ func NewRunner(config *Config) (*Runner, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return nil, errors.Wrapf(err, "could not get current working directory")
+	}
+	executable, err := os.Executable()
+	if err != nil {
+		return nil, errors.Wrapf(err, "could not get my executable path")
 	}
 	zapConfig := zap.NewDevelopmentConfig()
 	if config.Debug.Enabled && config.Debug.Logfile != "" {
@@ -67,10 +72,11 @@ func NewRunner(config *Config) (*Runner, error) {
 		return nil, errors.Wrapf(err, "could not initialize logger")
 	}
 	return &Runner{
-		config: config,
-		logger: logger,
-		pid:    os.Getpid(),
-		cwd:    cwd,
+		config:     config,
+		logger:     logger,
+		pid:        os.Getpid(),
+		cwd:        cwd,
+		executable: executable,
 	}, nil
 }
 

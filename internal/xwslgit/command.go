@@ -13,7 +13,7 @@ import (
 // Errors are processed inside this function (e.g. printing an error message) and just returns nil.
 func (r *Runner) PrepareCommandForDistro(distro string, args ...string) *exec.Cmd {
 	if distro == "" {
-		command, err := r.prepareWindowsGit(os.Args[0], os.Args[1:]...)
+		command, err := r.prepareWindowsGit(r.executable, os.Args[1:]...)
 		if err != nil {
 			log.Printf("xwslgit: could not detect git on Windows: %+v", err)
 			return nil
