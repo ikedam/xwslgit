@@ -81,5 +81,5 @@ xwslgit xwslgitversion
 ----------------------
 
 ```sh
-GOOS=windows GOARCH=amd64 go build -o xwslgit.exe -ldflags -H=windowsgui ./cmd/xwslgit
+GOOS=windows GOARCH=amd64 go build -o xwslgit.exe ./cmd/xwslgit
 ```

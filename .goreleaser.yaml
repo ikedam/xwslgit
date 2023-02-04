@@ -9,11 +9,6 @@ builds:
     goarch:
       - amd64
     main: ./cmd/xwslgit
-    ldflags:
-      # default
-      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser
-      # custom
-      - -H=windowsgui
 archives:
   - format: tar.gz
     # this name template makes the OS and Arch compatible with the results of uname.
