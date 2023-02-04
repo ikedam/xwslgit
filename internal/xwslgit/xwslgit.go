@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"syscall"
 
 	"go.uber.org/zap"
 
@@ -81,12 +80,7 @@ func (r *Runner) Run(args ...string) int {
 		zap.Int("pid", pid),
 		zap.Strings("args", command),
 	)
-	cmd := exec.Command(command[0], command[1:]...)
-	cmd.SysProcAttr = &syscall.SysProcAttr{CreationFlags: 0x08000000} // CREATE_NO_WINDOW
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err = cmd.Run()
+	err = execCommand(command...)
 	if err != nil {
 		var exitErr *exec.ExitError
 		if errors.As(err, &exitErr) {
