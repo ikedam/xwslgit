@@ -8,8 +8,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-// findAnotherExecutable searches paths for specified executable, but not currentExecutable
-// implemented just for Windows
+// findAnotherExecutable searches paths for specified executable,
+// but not the one same to currentExecutable.
+// implemented only for Windows.
 func findAnotherExecutable(currentExecutable, name string) (string, error) {
 	currentFileInfo, err := os.Stat(currentExecutable)
 	if err != nil {

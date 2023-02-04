@@ -10,6 +10,7 @@ import (
 	"os/exec"
 )
 
+// execCommand executes a command
 func execCommand(args ...string) *exec.Cmd {
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stdin = os.Stdin

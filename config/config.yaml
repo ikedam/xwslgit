@@ -1,0 +1,15 @@
+debug:
+  # set true to log xwslgit activities.
+  # useful for the case xwslgit doesn't work expected and diagnose the behavior.
+  enabled: false
+  # path to output logs. %APPDATA%\xwslgit\xwslgit.log is used if not configured.
+  logfile: C:\Windows\Temp\xwslgit.log
+  # envs are environment variables to log.
+  envs:
+    - GIT_DIR
+    - GIT_WORKING_TREE
+    - GIT_SSH
+detection:
+  # detect target WSL distribution from arguments to `git` command.
+  # if not set to true, detects only from the working directory.
+  useArguments: true

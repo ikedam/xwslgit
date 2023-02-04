@@ -55,6 +55,8 @@ func readConfig() *xwslgit.Config {
 	}
 	if config.Debug.Envs == nil {
 		config.Debug.Envs = []string{
+			"GIT_DIR",
+			"GIT_WORK_TREE",
 			"GIT_SSH",
 		}
 	}

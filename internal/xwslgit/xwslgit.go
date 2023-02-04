@@ -18,15 +18,20 @@ var wslPathPrefixes = []string{
 // Config is configurations for XWSLGit
 // Considered loading from YAML file.
 type Config struct {
-	Debug     DebugConfig
+	// Debug configures debug outputs
+	Debug DebugConfig
+	// Detection configures how to detect distributions
 	Detection DetectionConfig
 }
 
 // DebugConfig is configurations for debug outputs
 type DebugConfig struct {
+	// Enabled enables debug logging.
 	Enabled bool
+	// Logfile is the path to output logs.
 	Logfile string
-	Envs    []string
+	// Envs contains environment variables to reacord.
+	Envs []string
 }
 
 // DetectinoConfig is configurations about how to detect distribution
@@ -42,6 +47,8 @@ type Runner struct {
 	cwd    string
 }
 
+// NewRunner creates a new runner
+// This also records running environments.
 func NewRunner(config *Config) (*Runner, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -67,6 +74,7 @@ func NewRunner(config *Config) (*Runner, error) {
 	}, nil
 }
 
+// Run executes xwslgit operations
 func (r *Runner) Run(args ...string) int {
 	var envs []string
 	for _, envname := range r.config.Debug.Envs {
@@ -84,7 +92,7 @@ func (r *Runner) Run(args ...string) int {
 	distro := r.DetectDistribution(args...)
 	cmd := r.PrepareCommandForDistro(distro, args...)
 	if cmd == nil {
-		// Error message is output inside PrepareCommandForDistro
+		// The error message is output inside `PrepareCommandForDistro()`
 		return 127
 	}
 
