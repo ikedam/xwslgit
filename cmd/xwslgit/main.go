@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ikedam/xwslgit/pkg/xwslgit"
+	"github.com/ikedam/xwslgit/internal/xwslgit"
 	"gopkg.in/yaml.v3"
 )
 
