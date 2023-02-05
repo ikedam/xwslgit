@@ -85,3 +85,10 @@ How to build locally
 ```sh
 GOOS=windows GOARCH=amd64 go build -o xwslgit.exe ./cmd/xwslgit
 ```
+
+Known issues
+------------
+
+* Doesn't work with [Sourcetree for Windows](https://www.sourcetreeapp.com/).
+    * Sourcetree automatically detects Git for Windows and doesn't accept custom git clients.
+    * I couldn't have Sourcetree use `xwslgit`. Even replacing `git.exe` that Sourcetree refers to `xwslgit`, Sourcetree don't accept that as `git.exe`.

@@ -29,6 +29,9 @@ func (r *Runner) PrepareCommandForDistro(distro string, args ...string) *exec.Cm
 }
 
 func (r *Runner) prepareWindowsGit(currentExecutable string, args ...string) ([]string, error) {
+	if r.config.WindowsGit.Path != "" {
+		return append([]string{r.config.WindowsGit.Path}, args...), nil
+	}
 	gitPath, err := findAnotherExecutable(currentExecutable, "git")
 	if err != nil {
 		return nil, errors.Wrapf(err, "git on Windows was not found")

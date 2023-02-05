@@ -22,21 +22,30 @@ type Config struct {
 	Debug DebugConfig
 	// Detection configures how to detect distributions
 	Detection DetectionConfig
+	// WindowsGit configures launch options for Git for Windows
+	WindowsGit WindowsGitConfig `yaml:"windowsGit,omitempty"`
 }
 
 // DebugConfig is configurations for debug outputs
 type DebugConfig struct {
-	// Enabled enables debug logging.
+	// Enabled enables debug logging
 	Enabled bool
-	// Logfile is the path to output logs.
+	// Logfile is the path to output logs
 	Logfile string
-	// Envs contains environment variables to reacord.
+	// Envs contains environment variables to reacord
 	Envs []string
 }
 
 // DetectinoConfig is configurations about how to detect distribution
 type DetectionConfig struct {
-	UseArguments bool
+	// UseArguments enables the feature to detect a destribution from arguments
+	UseArguments bool `yaml:"useArguments,omitempty"`
+}
+
+// WindowsGitConfig is configurations about Git on Windows
+type WindowsGitConfig struct {
+	// Path is path to `git.exe` of Git for Windows
+	Path string
 }
 
 // Runner runs operations for xwslgit

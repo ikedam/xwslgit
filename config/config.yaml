@@ -14,3 +14,7 @@ detection:
   # detect target WSL distribution from arguments to `git` command.
   # if not set to true, detects only from the working directory.
   useArguments: true
+windowsGit:
+  # You can configure path to Git for Windows explicitly
+  # though xwslgit automatically find that.
+  path: C:\Program Files\Git\cmd\git.exe

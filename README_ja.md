@@ -83,3 +83,10 @@ xwslgit xwslgitversion
 ```sh
 GOOS=windows GOARCH=amd64 go build -o xwslgit.exe ./cmd/xwslgit
 ```
+
+既知の問題
+----------
+
+* [Sourcetree for Windows](https://www.sourcetreeapp.com/) では使用できません。
+    * Sourcetree は自動的に Git for Windows を検出して使用し、カスタムの Git クライアントを使用することができません。
+    * いかなる手段を持ってしても `xwslgit` を Sourcetree で使用することはできませんでした。Sourcetree が参照している `git.exe` を `xwslgit` に置き換えても、 Sourcetree はなぜかそれを `git.exe` として扱うことはありませんでした。
