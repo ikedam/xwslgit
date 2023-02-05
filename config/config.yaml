@@ -1,8 +1,9 @@
+# Put this file to %APPDATA%\xwslgit\config.yaml to configure behaviors of xwslgit
 debug:
   # set true to log xwslgit activities.
   # useful for the case xwslgit doesn't work expected and diagnose the behavior.
   enabled: false
-  # path to output logs. %APPDATA%\xwslgit\xwslgit.log is used if not configured.
+  # path to output logs. %APPDATA%\xwslgit\debug.log is used if not configured.
   logfile: C:\Windows\Temp\xwslgit.log
   # envs are environment variables to log.
   envs:
