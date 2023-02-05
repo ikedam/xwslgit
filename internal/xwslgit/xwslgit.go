@@ -24,6 +24,8 @@ type Config struct {
 	Detection DetectionConfig
 	// WindowsGit configures launch options for Git for Windows
 	WindowsGit WindowsGitConfig `yaml:"windowsGit,omitempty"`
+	// Distributions configures launch options for git on WSL distributions.
+	Distributions map[string]DistributionConfig
 }
 
 // DebugConfig is configurations for debug outputs
@@ -46,6 +48,14 @@ type DetectionConfig struct {
 type WindowsGitConfig struct {
 	// Path is path to `git.exe` of Git for Windows
 	Path string
+}
+
+// DistributionConfig is configurations about git launching on a WSL distribution
+type DistributionConfig struct {
+	// Command is the command to launch git
+	Command []string
+	// EscapeArguments escapes arguments passing to command to launch git
+	EscapeArguments bool `yaml:"escapeArguments,omitempty"`
 }
 
 // Runner runs operations for xwslgit

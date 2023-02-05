@@ -18,3 +18,18 @@ windowsGit:
   # You can configure path to Git for Windows explicitly
   # though xwslgit automatically find that.
   path: C:\Program Files\Git\cmd\git.exe
+distributions:
+  Ubuntu-22.04:
+    # You can override the command to launch git on WSL
+    # arguments to git will be appended to the last.
+    command:
+      - wsl
+      - -d
+      - Ubuntu-22.04
+      - --shell-type
+      - none
+      - --
+      - git
+    # true for escaping arguments.
+    # useful especially when without `--shell-type none`
+    escapeArguments: false

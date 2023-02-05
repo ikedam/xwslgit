@@ -40,20 +40,36 @@ func (r *Runner) prepareWindowsGit(currentExecutable string, args ...string) ([]
 }
 
 func (r *Runner) prepareWSLGit(distro string, args ...string) ([]string, error) {
+	var config DistributionConfig
+	if r.config.Distributions != nil {
+		// Note: zero value is set if no configuration
+		config = r.config.Distributions[distro]
+	}
 	replacedArgs := make([]string, len(args))
 	for i, arg := range args {
 		replacedArgs[i] = r.ConvertPathToWSL(distro, arg)
+		if config.EscapeArguments {
+			replacedArgs[i] = escapeArgument(replacedArgs[i])
+		}
 	}
-	return append([]string{
-		"wsl",
-		"-d",
-		distro,
-		// not to have special letters escaped
-		"--shell-type",
-		"none",
-		"--",
-		"git",
-	}, replacedArgs...), nil
+	var command []string
+	if len(config.Command) > 0 {
+		command = make([]string, len(config.Command), len(config.Command)+len(replacedArgs))
+		copy(command, config.Command)
+	} else {
+		// Not optimal (requires memory allocation for `append`), but easy to read
+		command = []string{
+			"wsl",
+			"-d",
+			distro,
+			// not to have special letters escaped
+			"--shell-type",
+			"none",
+			"--",
+			"git",
+		}
+	}
+	return append(command, replacedArgs...), nil
 }
 
 // ConvertPathToWSL convert a value to a WSL path if the value is a Windows path pointing WSL filesystem
@@ -72,4 +88,23 @@ func (r *Runner) ConvertPathToWSL(distro string, path string) string {
 	}
 	// not considered a path. return as-is.
 	return path
+}
+
+var shellSpecialLetters = ` #$&*()\|[]{};'"<>?!` + "`"
+
+func escapeArgument(arg string) string {
+	if len(arg) == 0 {
+		return `''`
+	}
+	if !strings.ContainsAny(arg, shellSpecialLetters) {
+		return arg
+	}
+	var sb strings.Builder
+	for _, letter := range arg {
+		if strings.ContainsRune(shellSpecialLetters, letter) {
+			sb.WriteRune('\\')
+		}
+		sb.WriteRune(letter)
+	}
+	return sb.String()
 }
