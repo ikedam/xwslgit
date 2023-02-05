@@ -70,6 +70,28 @@ Detailed behavior
 
 That's all.
 
+Cusomizing command to launch git on WSL
+---------------------------------------
+
+You can configure command to launch git on WSL.
+You can use `direnv` like this (not tested):
+
+```yaml
+distributions:
+  Ubuntu-22.04:
+    command:
+      - wsl
+      - -d
+      - Ubuntu-22.04
+      - --shell-type
+      - none
+      - --
+      - direnv
+      - exec
+      - .
+      - git
+```
+
 Special command
 ---------------
 

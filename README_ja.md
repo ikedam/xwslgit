@@ -68,6 +68,28 @@ WSLENV=GIT_SSH/p:GIT_DIR/p:GIT_WORK_TREE/p:GIT_AUTHOR_NAME:GIT_AUTHOR_EMAIL
 
 そんだけ。
 
+WSL で起動するコマンドのカスタマイズ
+------------------------------------
+
+WSL で git コマンドを起動する方法をカスタマイズできます。
+例えば `direnv` を使う場合は以下のような設定を行います (テストしてない):
+
+```yaml
+distributions:
+  Ubuntu-22.04:
+    command:
+      - wsl
+      - -d
+      - Ubuntu-22.04
+      - --shell-type
+      - none
+      - --
+      - direnv
+      - exec
+      - .
+      - git
+```
+
 特別なコマンド
 --------------
 
