@@ -20,8 +20,12 @@ I want to use [TortoiseGit](https://tortoisegit.org/) even on WSL directories. B
 * Permission issues. Executable bits aren't properly set on WSL filesystems.
 * Ownership issues. You need to run `git config --global --add safe.directory ...` for WSL directories.
 
+[wslgit](https://github.com/andy-5/wslgit) deals with the same issue, but that launches `git` always on WSL even for repositories on Windows file system.
+
 Usage
 -----
+
+Binaries of `xwslgit` are available on [Releases](https://github.com/ikedam/xwslgit/releases).
 
 ### Quick usage
 

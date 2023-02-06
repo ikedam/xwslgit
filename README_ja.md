@@ -18,8 +18,12 @@ Cross WSL Git (xwslgit)
 * ファイルの権限がおかしくなる。特に実行ビットがちゃんと WSL 上で設定されない。
 * ファイルの所有者の問題。 `git config --global --add safe.directory ...` を呼び出さないとちゃんと動かない。
 
+[wslgit](https://github.com/andy-5/wslgit) も解決策になりますが、Windows ファイルシステム上のリポジトリに対しても WSL で `git` を起動してしまいます。
+
 使用方法
 --------
+
+`xwslgit` のビルド済みバイナリを [Releases](https://github.com/ikedam/xwslgit/releases) からダウンロードできます。
 
 ### クイックスタート
 
