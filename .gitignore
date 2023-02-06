@@ -1,3 +1,4 @@
 /.devcontainer
 /dist
-/*.exe
+*.exe
+*.syso

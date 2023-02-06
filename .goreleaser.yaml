@@ -9,6 +9,9 @@ builds:
     goarch:
       - amd64
     main: ./cmd/xwslgit
+    hooks:
+      pre:
+        - go run github.com/akavel/rsrc@v0.10.2 -ico icon/icon.ico -arch {{ .Arch }} -o cmd/xwslgit/rsrc_windows_{{ .Arch }}.syso
 archives:
   - format: tar.gz
     # this name template makes the OS and Arch compatible with the results of uname.
