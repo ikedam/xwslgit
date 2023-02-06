@@ -112,3 +112,9 @@ GOOS=windows GOARCH=amd64 go build -o xwslgit.exe ./cmd/xwslgit
 * [Sourcetree for Windows](https://www.sourcetreeapp.com/) では使用できません。
     * Sourcetree は自動的に Git for Windows を検出して使用し、カスタムの Git クライアントを使用することができません。
     * いかなる手段を持ってしても `xwslgit` を Sourcetree で使用することはできませんでした。Sourcetree が参照している `git.exe` を `xwslgit` に置き換えても、 Sourcetree はなぜかそれを `git.exe` として扱うことはありませんでした。
+
+ライセンス
+----------
+
+* `xwslgit` は [MIT License](LICENSE) で配布しています。
+* `xwslgit logo` は [Git Logo](https://git-scm.com/downloads/logos) をベースに [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/) で配布しています。

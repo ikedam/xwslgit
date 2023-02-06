@@ -114,3 +114,9 @@ Known issues
 * Doesn't work with [Sourcetree for Windows](https://www.sourcetreeapp.com/).
     * Sourcetree automatically detects Git for Windows and doesn't accept custom git clients.
     * I couldn't have Sourcetree use `xwslgit`. Even replacing `git.exe` that Sourcetree refers to `xwslgit`, Sourcetree don't accept that as `git.exe`.
+
+LICENSE
+-------
+
+* `xwslgit` is licensed under [MIT License](LICENSE).
+* `xwslgit logo` is licensed under [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/), based on [Git Logo](https://git-scm.com/downloads/logos).
