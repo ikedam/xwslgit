@@ -20,6 +20,13 @@ Cross WSL Git (xwslgit)
 
 [wslgit](https://github.com/andy-5/wslgit) も解決策になりますが、Windows ファイルシステム上のリポジトリに対しても WSL で `git` を起動してしまいます。
 
+お知らせ
+--------
+
+**残念ながら `xwslgit` は `TortoiseGit` では思ったように動かないことがわかりました。**
+
+`TortoiseGit` は特定の処理、特にコミットの情報を参照する処理において、 `git.exe` ではなく `libgit2.dll` か `libgit` (`gitdll`) を使用します。設定で `libgit2` を無効化することができますが、 `libgit`/`gitdll` を無効化することはできません。`gitdll` をラップして WSL 上の `libgit` につなぐ…といった処理をすればあるいは問題を解決できるかもしれませんが、そういうことができるものなのかは不明です。
+
 使用方法
 --------
 

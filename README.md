@@ -22,6 +22,13 @@ I want to use [TortoiseGit](https://tortoisegit.org/) even on WSL directories. B
 
 [wslgit](https://github.com/andy-5/wslgit) deals with the same issue, but that launches `git` always on WSL even for repositories on Windows file system.
 
+NOTICE
+------
+
+**Unfortunately, I found `xwslgit` NOT work with `TortoiseGit` as expected.**
+
+`TortoiseGit` performs some operations especially referencing commit informations with `libgit2` or `libgit` (`gitdll`), not with `git.exe`. You can disable `libgit2` but can never disable `libgit`/`gitdll`. Proxying `gitdll` and bypassing to `libgit` on WSL distributions might resolve this issue, but I don't know how to do that.
+
 Usage
 -----
 
